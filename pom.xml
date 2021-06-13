@@ -8,7 +8,7 @@
   <artifactId>andersen_jsql_testproject</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-
+<!-- sada -->
   <name>andersen_jsql_testproject Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
