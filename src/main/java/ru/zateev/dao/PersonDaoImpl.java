@@ -114,6 +114,20 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public void deletePerson(int id) {
+        String sql = "DELETE FROM andersen WHERE id = ?";
+         connectionByDatabase = new ConnectionByDatabase();
+        try  {
+            Connection conn = connectionByDatabase.connectByDatabase() ;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
 
+            pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
