@@ -13,9 +13,10 @@
 <br>
 
 
-<form:form action="/saveEmployee" modelAttribute="employeees">
+<form:form action="/saveEmployee" modelAttribute="personsss">
 
     <form:hidden path="id"/>
+
     Имя <form:input path="name"/>
     <br>
     Фамилия <form:input path="family"/>

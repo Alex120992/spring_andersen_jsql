@@ -25,7 +25,6 @@
             </c:param>
         </c:url>
         <c:url var="deleteButton" value="/deleteEmployee">
-
             <c:param name="empId" value="${emp.id}">
             </c:param>
         </c:url>
@@ -42,7 +41,7 @@
 
             <td>
                 <input type="button" value="Обновить" onclick="window.location.href = '${updateButton}'">
-<%--                <input type="button" value="Удалить" onclick="window.location.href = '${deleteButton}'">--%>
+                <input type="button" value="Удалить" onclick="window.location.href = '${deleteButton}'">
             </td>
 
         </tr>
