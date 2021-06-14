@@ -1,29 +1,33 @@
 package ru.zateev.connection;
 
-import com.jcraft.jsch.JSchException;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Component
+
 public class ConnectionByDatabase {
 
-    Connection connection;
-    public Connection connectByDatabase () throws SQLException, ClassNotFoundException {
+    public Connection connectByDatabase() throws SQLException {
+        Connection connection = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/alex"
+                    , "alex"
+                    , "1234");
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            connection.setAutoCommit(false);
+        } catch (ClassNotFoundException | SQLException e) {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            connection.close();
 
-        Class.forName("org.postgresql.Driver");
-         connection = DriverManager.getConnection(
-                "jdbc:postgresql://127.0.0.1:5432/alex", "alex","1234");
-        System.out.println("Done");
+        }
+
         return connection;
-
     }
-
-    public void closeConnetion () throws SQLException {
-        connection.close();
-    }
-
 
 }

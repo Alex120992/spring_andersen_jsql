@@ -12,7 +12,6 @@ import ru.zateev.service.PersonService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
 
     @Autowired
@@ -43,7 +42,6 @@ public class HomeController {
     }
     @RequestMapping("/updateInfo")
     public String updateEmployee(@RequestParam("empId") int id, Model model) {
-        System.out.println(id);
         Person person = personService.getPerson(id);
         model.addAttribute("personsss", person);
         return "employee-info";

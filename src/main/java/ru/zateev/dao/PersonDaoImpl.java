@@ -1,6 +1,5 @@
 package ru.zateev.dao;
 
-import com.jcraft.jsch.JSchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.zateev.Entity.Person;
@@ -12,102 +11,107 @@ import java.util.List;
 
 @Repository
 public class PersonDaoImpl implements PersonDao {
-    @Autowired
-    ConnectionByDatabase connectionByDatabase;
 
     @Override
     public List<Person> getAllPersons() {
-        connectionByDatabase = new ConnectionByDatabase();
+
         List<Person> personList = new ArrayList<>();
 
-        try {
-            Connection connection = connectionByDatabase.connectByDatabase();
+        try (Connection connection
+                     = new ConnectionByDatabase().connectByDatabase()) {
+            System.out.println(connection.getTransactionIsolation());
+            connection.setAutoCommit(false);
 
-            Statement ps = connection.createStatement();
-            ResultSet resultSet = ps.executeQuery("SELECT * FROM andersen ");
-            while (resultSet.next()) {
-                Person person = new Person();
-                person.setId(resultSet.getInt("id"));
-                person.setAge(resultSet.getInt("age"));
-                person.setName(resultSet.getString("name"));
-                person.setFamily(resultSet.getString("family"));
-                personList.add(person);
+            try (PreparedStatement ps
+                         = connection.prepareStatement("SELECT * FROM andersen ORDER BY id")) {
+
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+                    Person person = new Person();
+                    person.setId(resultSet.getInt("id"));
+                    person.setAge(resultSet.getInt("age"));
+                    person.setName(resultSet.getString("name"));
+                    person.setFamily(resultSet.getString("family"));
+                    personList.add(person);
+                }
+            } catch (SQLException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw new SQLException();
             }
-
-
-            return personList;
-
+            connection.setAutoCommit(true);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connectionByDatabase.closeConnetion();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
         }
 
-
-        return null;
+        return personList;
     }
 
     @Override
     public void savePerson(Person person) {
-        String sql;
-        PreparedStatement ps;
 
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
 
-        connectionByDatabase = new ConnectionByDatabase();
+            String sql;
 
-        try {
-            Connection connection = connectionByDatabase.connectByDatabase();
-            if (person.getId() != 0) {
-                sql = "UPDATE andersen SET  name = ?," +
-                        "family = ?, age = ? " +
-                        "WHERE id ="+person.getId();
-                ps = connection.prepareStatement(sql);
-            } else {
-                sql = "INSERT INTO andersen (name,family,age) VALUES (?,?,?)";
-                ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            try {
+                PreparedStatement ps;
+                if (person.getId() != 0) {
+                    sql = "UPDATE andersen SET  name = ?," +
+                            "family = ?, age = ? " +
+                            "WHERE id =" + person.getId();
+                    ps = connection.prepareStatement(sql);
+
+                } else {
+                    sql = "INSERT INTO andersen (name,family,age) VALUES (?,?,?)";
+                    ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                }
+
+                ps.setString(1, person.getName());
+                ps.setString(2, person.getFamily());
+                ps.setInt(3, person.getAge());
+                ps.executeUpdate();
+                connection.commit();
+
+            } catch (SQLException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw new SQLException();
             }
-
-
-            ps.setString(1, person.getName());
-            ps.setString(2, person.getFamily());
-            ps.setInt(3, person.getAge());
-
-            ps.executeUpdate();
-
-            connection.close();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка в обновлениях");
         }
     }
 
     @Override
     public Person getPerson(int id) {
+
         Person person = new Person();
         String sql = "SELECT * FROM andersen WHERE id = " + String.valueOf(id);
-        connectionByDatabase = new ConnectionByDatabase();
-        try {
-            Connection connection = connectionByDatabase.connectByDatabase();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                person.setId(resultSet.getInt("id"));
-                person.setName(resultSet.getString("name"));
-                person.setFamily(resultSet.getString("family"));
-                person.setAge(resultSet.getInt("age"));
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
+
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ResultSet resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+                    person.setId(resultSet.getInt("id"));
+                    person.setName(resultSet.getString("name"));
+                    person.setFamily(resultSet.getString("family"));
+                    person.setAge(resultSet.getInt("age"));
+                }
+
+            } catch (SQLException e) {
+                connection.setAutoCommit(true);
+                throw new SQLException();
             }
-            connection.close();
+
+            connection.setAutoCommit(true);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return person;
     }
@@ -115,19 +119,24 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public void deletePerson(int id) {
         String sql = "DELETE FROM andersen WHERE id = ?";
-         connectionByDatabase = new ConnectionByDatabase();
-        try  {
-            Connection conn = connectionByDatabase.connectByDatabase() ;
-            PreparedStatement pstmt = conn.prepareStatement(sql);
 
-            pstmt.setInt(1, id);
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
 
-            pstmt.executeUpdate();
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
+                pstmt.setInt(1, id);
+
+                pstmt.executeUpdate();
+
+            } catch (SQLException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw new SQLException();
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }
