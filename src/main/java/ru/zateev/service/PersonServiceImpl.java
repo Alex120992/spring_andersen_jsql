@@ -1,18 +1,11 @@
 package ru.zateev.service;
 
-import com.jcraft.jsch.JSchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.zateev.Entity.Person;
 import ru.zateev.connection.ConnectionByDatabase;
 import ru.zateev.dao.PersonDao;
 import ru.zateev.dao.PersonDaoImpl;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -1,6 +1,5 @@
 package ru.zateev.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.zateev.Entity.Person;
 import ru.zateev.connection.ConnectionByDatabase;
@@ -26,6 +25,7 @@ public class PersonDaoImpl implements PersonDao {
                          = connection.prepareStatement("SELECT * FROM andersen ORDER BY id")) {
 
                 ResultSet resultSet = ps.executeQuery();
+
                 while (resultSet.next()) {
                     Person person = new Person();
                     person.setId(resultSet.getInt("id"));
@@ -34,12 +34,15 @@ public class PersonDaoImpl implements PersonDao {
                     person.setFamily(resultSet.getString("family"));
                     personList.add(person);
                 }
+
             } catch (SQLException e) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 throw new SQLException();
             }
+
             connection.setAutoCommit(true);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -80,8 +83,9 @@ public class PersonDaoImpl implements PersonDao {
             }
             connection.commit();
             connection.setAutoCommit(true);
-        } catch (SQLException throwables) {
-            System.err.println("Ошибка в обновлениях");
+
+        } catch (SQLException e) {
+            System.err.println(e.getErrorCode());
         }
     }
 
@@ -90,6 +94,7 @@ public class PersonDaoImpl implements PersonDao {
 
         Person person = new Person();
         String sql = "SELECT * FROM andersen WHERE id = " + String.valueOf(id);
+
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
 
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -104,14 +109,15 @@ public class PersonDaoImpl implements PersonDao {
                 }
 
             } catch (SQLException e) {
+                connection.rollback();
                 connection.setAutoCommit(true);
                 throw new SQLException();
             }
 
             connection.setAutoCommit(true);
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println(e.getErrorCode());
         }
         return person;
     }
@@ -136,7 +142,7 @@ public class PersonDaoImpl implements PersonDao {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getErrorCode());
         }
     }
 }

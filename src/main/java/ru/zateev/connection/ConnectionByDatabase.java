@@ -1,7 +1,5 @@
 package ru.zateev.connection;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,8 +15,10 @@ public class ConnectionByDatabase {
                     "jdbc:postgresql://127.0.0.1:5432/alex"
                     , "alex"
                     , "1234");
+
             connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             connection.setAutoCommit(false);
+
         } catch (ClassNotFoundException | SQLException e) {
             if (connection != null) {
                 connection.setAutoCommit(true);
