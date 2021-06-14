@@ -15,16 +15,13 @@ public class ConnectionByDatabase {
                     "jdbc:postgresql://127.0.0.1:5432/alex"
                     , "alex"
                     , "1234");
-
             connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             connection.setAutoCommit(false);
-
         } catch (ClassNotFoundException | SQLException e) {
             if (connection != null) {
                 connection.setAutoCommit(true);
             }
             connection.close();
-
         }
 
         return connection;

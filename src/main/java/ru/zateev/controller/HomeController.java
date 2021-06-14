@@ -26,10 +26,8 @@ public class HomeController {
 
     @RequestMapping("/addNewEmployee")
     public String addNewEmployee(Model model) {
-
         Person person = new Person();
         model.addAttribute("personsss", person);
-
         return "employee-info";
     }
 
