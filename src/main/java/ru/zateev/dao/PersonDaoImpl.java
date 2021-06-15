@@ -14,9 +14,7 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public List<Person> getAllPersons() {
-
         List<Person> personList = new ArrayList<>();
-
         try (Connection connection
                      = new ConnectionByDatabase().connectByDatabase()) {
             System.out.println(connection.getTransactionIsolation());
@@ -47,7 +45,6 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public void savePerson(Person person) {
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-
             try {
                 PreparedStatement ps;
                 if (person.getId() != 0) {
@@ -74,7 +71,6 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public Person getPerson(int id) {
-
         Person person = new Person();
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
             try (PreparedStatement ps = connection.prepareStatement(Constans.SELECT_BY_ID+id)) {
@@ -100,7 +96,6 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public void deletePerson(int id) {
-
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
             try (PreparedStatement pstmt = connection.prepareStatement(Constans.DELETE)) {
                 pstmt.setInt(1, id);

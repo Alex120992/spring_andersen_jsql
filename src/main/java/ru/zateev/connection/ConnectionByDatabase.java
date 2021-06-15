@@ -1,5 +1,7 @@
 package ru.zateev.connection;
 
+import ru.zateev.Constans;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,18 +12,17 @@ public class ConnectionByDatabase {
     public Connection connectByDatabase() throws SQLException {
         Connection connection = null;
         try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://127.0.0.1:5432/alex"
-                    , "alex"
-                    , "1234");
-            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            Class.forName(Constans.DRIVER);
+            connection = DriverManager.getConnection(Constans.URL+Constans.DATABASE
+                    , Constans.USER
+                    , Constans.PASSWORD);
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
         } catch (ClassNotFoundException | SQLException e) {
             if (connection != null) {
                 connection.setAutoCommit(true);
+                connection.close();
             }
-            connection.close();
         }
 
         return connection;
