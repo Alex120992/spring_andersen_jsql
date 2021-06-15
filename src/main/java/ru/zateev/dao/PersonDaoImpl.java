@@ -1,6 +1,7 @@
 package ru.zateev.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.zateev.Constans;
 import ru.zateev.Entity.Person;
 import ru.zateev.connection.ConnectionByDatabase;
 
@@ -21,7 +22,7 @@ public class PersonDaoImpl implements PersonDao {
             System.out.println(connection.getTransactionIsolation());
             connection.setAutoCommit(false);
             try (PreparedStatement ps
-                         = connection.prepareStatement("SELECT * FROM andersen ORDER BY id")) {
+                         = connection.prepareStatement(Constans.SELECT_TABLE)) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     Person person = new Person();
@@ -46,17 +47,13 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public void savePerson(Person person) {
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-            String sql;
+
             try {
                 PreparedStatement ps;
                 if (person.getId() != 0) {
-                    sql = "UPDATE andersen SET  name = ?," +
-                            "family = ?, age = ? " +
-                            "WHERE id =" + person.getId();
-                    ps = connection.prepareStatement(sql);
+                    ps = connection.prepareStatement(Constans.UPDATE_DATA+person.getId());
                 } else {
-                    sql = "INSERT INTO andersen (name,family,age) VALUES (?,?,?)";
-                    ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps = connection.prepareStatement(Constans.SAVE_DATA, Statement.RETURN_GENERATED_KEYS);
                 }
                 ps.setString(1, person.getName());
                 ps.setString(2, person.getFamily());
@@ -77,10 +74,10 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public Person getPerson(int id) {
+
         Person person = new Person();
-        String sql = "SELECT * FROM andersen WHERE id = " + String.valueOf(id);
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try (PreparedStatement ps = connection.prepareStatement(Constans.SELECT_BY_ID+id)) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     person.setId(resultSet.getInt("id"));
@@ -97,14 +94,15 @@ public class PersonDaoImpl implements PersonDao {
         } catch (SQLException e) {
             System.err.println(e.getErrorCode());
         }
+
         return person;
     }
 
     @Override
     public void deletePerson(int id) {
-        String sql = "DELETE FROM andersen WHERE id = ?";
+
         try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            try (PreparedStatement pstmt = connection.prepareStatement(Constans.DELETE)) {
                 pstmt.setInt(1, id);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
