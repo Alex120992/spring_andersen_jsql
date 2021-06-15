@@ -19,7 +19,7 @@
 
     Имя <form:input path="name"/>
     <br>
-    Фамилия <form:input path="family"/>
+    Фамилия <form:input path="surname"/>
     <br>
     Возраст <form:input path="age"/>
     <br>

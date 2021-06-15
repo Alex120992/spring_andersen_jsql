@@ -33,7 +33,7 @@
                     ${emp.name}
             </td>
             <td>
-                    ${emp.family}
+                    ${emp.surname}
             </td>
             <td>
                     ${emp.age}

@@ -5,7 +5,8 @@ public class Person {
 
     private int id;
     private String name;
-    private String family;
+    private String surname;
+    private String mail;
     private int age;
 
     public int getId() {
@@ -24,12 +25,12 @@ public class Person {
         this.name = name;
     }
 
-    public String getFamily() {
-        return family;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setFamily(String family) {
-        this.family = family;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public int getAge() {
@@ -40,12 +41,20 @@ public class Person {
         this.age = age;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
 
                 ", name='" + name + '\'' +
-                ", family='" + family + '\'' +
+                ", family='" + surname + '\'' +
                 ", age=" + age +
                 '}';
     }

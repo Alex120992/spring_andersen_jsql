@@ -27,7 +27,7 @@ public class PersonDaoImpl implements PersonDao {
                     person.setId(resultSet.getInt("id"));
                     person.setAge(resultSet.getInt("age"));
                     person.setName(resultSet.getString("name"));
-                    person.setFamily(resultSet.getString("family"));
+                    person.setSurname(resultSet.getString("family"));
                     personList.add(person);
                 }
             } catch (SQLException e) {
@@ -53,7 +53,7 @@ public class PersonDaoImpl implements PersonDao {
                     ps = connection.prepareStatement(Constans.SAVE_DATA, Statement.RETURN_GENERATED_KEYS);
                 }
                 ps.setString(1, person.getName());
-                ps.setString(2, person.getFamily());
+                ps.setString(2, person.getSurname());
                 ps.setInt(3, person.getAge());
                 ps.executeUpdate();
                 connection.commit();
@@ -78,7 +78,7 @@ public class PersonDaoImpl implements PersonDao {
                 while (resultSet.next()) {
                     person.setId(resultSet.getInt("id"));
                     person.setName(resultSet.getString("name"));
-                    person.setFamily(resultSet.getString("family"));
+                    person.setSurname(resultSet.getString("family"));
                     person.setAge(resultSet.getInt("age"));
                 }
             } catch (SQLException e) {
