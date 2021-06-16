@@ -6,7 +6,7 @@ import ru.zateev.Entity.Person;
 @Component
 public class Validator {
     private final String regularFamilyAndName = "^([A-Z]|[А-Я])([a-z]|[а-я]){1,19}";
-    private final String regularAge = "([1-9][\\d]?|[1][1-2][\\d])";
+    private final String regularAge = "([1-9][\\d]?|[1][0-2][\\d])";
     private final String regularMail = "^[\\w][^\\s]{0,30}[@][a-z]{2,10}[.][a-z]{2,15}$";
 
 
@@ -17,22 +17,22 @@ public class Validator {
         person.setValidateMail(validMail(person.getMail()));
     }
 
-    private boolean validName(String name) {
+    public boolean validName(String name) {
         return !name.matches(regularFamilyAndName);
     }
 
-    private boolean validSurname(String surname) {
+    public boolean validSurname(String surname) {
         return !surname.matches(regularFamilyAndName);
 
     }
 
-    private boolean validAge(int age) {
+    public boolean validAge(int age) {
         String convertAge = String.valueOf(age);
         return !convertAge.matches(regularAge);
 
     }
 
-    private boolean validMail(String mail) {
+    public boolean validMail(String mail) {
         return !mail.matches(regularMail);
     }
 }

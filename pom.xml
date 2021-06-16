@@ -74,12 +74,26 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>3.10.0</version>
+      <scope>test</scope>
+    </dependency>
+
 
 
     <dependency>
       <groupId>com.jcraft</groupId>
       <artifactId>jsch</artifactId>
       <version>0.1.54</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>

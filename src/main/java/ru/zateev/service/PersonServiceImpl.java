@@ -3,6 +3,8 @@ package ru.zateev.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.zateev.Entity.Person;
+import ru.zateev.User;
+import ru.zateev.UserImpl;
 import ru.zateev.connection.ConnectionByDatabase;
 import ru.zateev.dao.PersonDao;
 import ru.zateev.dao.PersonDaoImpl;
@@ -15,25 +17,25 @@ public class PersonServiceImpl implements PersonService {
 
     ConnectionByDatabase connectionByDatabase;
     @Override
-    public List<Person> getAllPersons() {
+    public List<Person> getAllPersons(User userImpl) {
         personDao = new PersonDaoImpl();
-        List<Person> persons = personDao.getAllPersons();
+        List<Person> persons = personDao.getAllPersons(userImpl);
 
         return persons;
     }
 
     @Override
-    public void savePerson(Person person) {
-        personDao.savePerson(person);
+    public void savePerson(Person person, User userImpl) {
+        personDao.savePerson(person, userImpl);
     }
 
     @Override
-    public Person getPerson(int id) {
-        return personDao.getPerson(id);
+    public Person getPerson(int id, User userImpl) {
+        return personDao.getPerson(id, userImpl);
     }
 
     @Override
-    public void deletePerson(int id) {
-        personDao.deletePerson(id);
+    public void deletePerson(int id, User userImpl) {
+        personDao.deletePerson(id, userImpl);
     }
 }

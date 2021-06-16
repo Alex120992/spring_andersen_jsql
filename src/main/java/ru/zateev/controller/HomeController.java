@@ -1,12 +1,14 @@
 package ru.zateev.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.zateev.Entity.Person;
+import ru.zateev.User;
 import ru.zateev.service.PersonService;
 import ru.zateev.validator.Validator;
 
@@ -14,6 +16,9 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+    @Qualifier("userImpl")
+    @Autowired
+    User user;
 
     @Autowired
     private PersonService personService;
@@ -22,7 +27,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String showAllEmployees(Model model) {
-        List<Person> allPeople = personService.getAllPersons();
+        List<Person> allPeople = personService.getAllPersons(user);
         model.addAttribute("allPeop", allPeople);
         return "all-employees";
     }
@@ -45,19 +50,20 @@ public class HomeController {
             return "employee-info";
         }
         System.out.println(empl);
-        personService.savePerson(empl);
+        personService.savePerson(empl, user);
         return "redirect:/";
     }
+
     @RequestMapping("/updateInfo")
     public String updateEmployee(@RequestParam("empId") int id, Model model) {
-        Person person = personService.getPerson(id);
+        Person person = personService.getPerson(id, user);
         model.addAttribute("personsss", person);
         return "employee-info";
     }
 
     @RequestMapping("/deleteEmployee")
-    public String deleteEmployee (@RequestParam("empId") int id){
-        personService.deletePerson(id);
+    public String deleteEmployee(@RequestParam("empId") int id) {
+        personService.deletePerson(id, user);
         return "redirect:/";
     }
 }

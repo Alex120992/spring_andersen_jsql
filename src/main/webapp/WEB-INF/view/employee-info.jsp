@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix='spring' uri='http://www.springframework.org/tags' %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html >
 <html lang="ru">
@@ -32,8 +33,8 @@
             </td>
         </tr>
         <tr>
-
-            Имя  <td>
+            <td>Имя</td>
+            <td >
                 <form:input path="name"/>
             </td>
             <td>
@@ -44,6 +45,7 @@
             </td>
         </tr>
         <tr>
+            <td>Фамилия</td>
             <td>
                 <form:input path="surname"/>
             </td>
@@ -54,6 +56,7 @@
             </td>
         </tr>
         <tr>
+            <td>Возраст</td>
             <td>
                 <form:input path="age"/>
             </td>
@@ -64,6 +67,7 @@
             </td>
         </tr>
         <tr>
+            <td>Почта</td>
             <td>
                 <form:input path="mail"/>
             </td>

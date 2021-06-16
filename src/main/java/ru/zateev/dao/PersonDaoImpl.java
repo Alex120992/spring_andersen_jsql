@@ -1,7 +1,8 @@
 package ru.zateev.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.zateev.Constans;
+import ru.zateev.User;
+import ru.zateev.UserImpl;
 import ru.zateev.Entity.Person;
 import ru.zateev.connection.ConnectionByDatabase;
 
@@ -13,14 +14,15 @@ import java.util.List;
 public class PersonDaoImpl implements PersonDao {
 
     @Override
-    public List<Person> getAllPersons() {
+    public List<Person> getAllPersons(User user) {
+
         List<Person> personList = new ArrayList<>();
         try (Connection connection
-                     = new ConnectionByDatabase().connectByDatabase()) {
+                     = new ConnectionByDatabase().connectByDatabase(user)) {
             System.out.println(connection.getTransactionIsolation());
             connection.setAutoCommit(false);
             try (PreparedStatement ps
-                         = connection.prepareStatement(Constans.SELECT_TABLE)) {
+                         = connection.prepareStatement(user.getAllSelect())) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     Person person = new Person();
@@ -44,14 +46,14 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void savePerson(Person person) {
-        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
+    public void savePerson(Person person, User user) {
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
             try {
                 PreparedStatement ps;
                 if (person.getId() != 0) {
-                    ps = connection.prepareStatement(Constans.UPDATE_DATA+person.getId());
+                    ps = connection.prepareStatement(user.getUpdateData()+person.getId());
                 } else {
-                    ps = connection.prepareStatement(Constans.SAVE_DATA, Statement.RETURN_GENERATED_KEYS);
+                    ps = connection.prepareStatement(user.getSaveData(), Statement.RETURN_GENERATED_KEYS);
                 }
                 ps.setString(1, person.getName());
                 ps.setString(2, person.getSurname());
@@ -72,10 +74,10 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public Person getPerson(int id) {
+    public Person getPerson(int id, User user) {
         Person person = new Person();
-        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-            try (PreparedStatement ps = connection.prepareStatement(Constans.SELECT_BY_ID+id)) {
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
+            try (PreparedStatement ps = connection.prepareStatement(user.getSelectById()+id)) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     person.setId(resultSet.getInt("id"));
@@ -98,9 +100,9 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void deletePerson(int id) {
-        try (Connection connection = new ConnectionByDatabase().connectByDatabase()) {
-            try (PreparedStatement pstmt = connection.prepareStatement(Constans.DELETE)) {
+    public void deletePerson(int id, User user) {
+        try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
+            try (PreparedStatement pstmt = connection.prepareStatement(user.getDelete())) {
                 pstmt.setInt(1, id);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
