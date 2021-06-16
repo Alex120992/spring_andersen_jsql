@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.zateev.Entity.Person;
 import ru.zateev.service.PersonService;
+import ru.zateev.validator.Validator;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class HomeController {
 
     @Autowired
     private PersonService personService;
+    @Autowired
+    private Validator validator;
 
     @RequestMapping("/")
     public String showAllEmployees(Model model) {
@@ -32,10 +35,17 @@ public class HomeController {
     }
 
     @RequestMapping("/saveEmployee")
-    public String saveEmployee(@ModelAttribute("personsss") Person empl) {
+    public String saveEmployee(@ModelAttribute("personsss") Person empl, Model model) {
 
+        validator.generalValidator(empl);
+
+        if (empl.isValide()) {
+            System.out.println("Работает");
+            model.addAttribute("personsss", empl);
+            return "employee-info";
+        }
+        System.out.println(empl);
         personService.savePerson(empl);
-
         return "redirect:/";
     }
     @RequestMapping("/updateInfo")

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html >
 <html lang="ru">
 <head>
@@ -15,15 +15,67 @@
 
 <form:form action="/saveEmployee" modelAttribute="personsss">
 
-    <form:hidden path="id"/>
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
 
-    Имя <form:input path="name"/>
-    <br>
-    Фамилия <form:input path="surname"/>
-    <br>
-    Возраст <form:input path="age"/>
-    <br>
+        </tr>
+        <br>
+        <tbody>
+        <tr>
+            <td>
+                <form:hidden path="id"/>
+            </td>
+            <td>
 
+            </td>
+        </tr>
+        <tr>
+
+            Имя  <td>
+                <form:input path="name"/>
+            </td>
+            <td>
+
+                <c:if test="${validateName}">
+                    <p> Введите коректное имя,например: Aleksey, Ivan </p>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form:input path="surname"/>
+            </td>
+            <td>
+                <c:if test="${personsss.validateSurname}">
+                    <p> Введите коректную фамилию,например: Ivanov </p>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form:input path="age"/>
+            </td>
+            <td>
+                <c:if test="${personsss.validateAge}">
+                    <p> Введите коректный возраст: от 1 до 129 </p>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form:input path="mail"/>
+            </td>
+            <td>
+                <c:if test="${personsss.validateMail}">
+                    <p> Проверьте ваш mail, например: ivanov@gmail.com </p>
+                </c:if>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
     <input type="submit" value="Добавить">
 </form:form>
 

@@ -18,7 +18,7 @@ public class PersonServiceImpl implements PersonService {
     public List<Person> getAllPersons() {
         personDao = new PersonDaoImpl();
         List<Person> persons = personDao.getAllPersons();
-        System.out.println(persons);
+
         return persons;
     }
 

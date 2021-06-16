@@ -16,6 +16,7 @@
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Возраст</th>
+        <th>Mail</th>
     </tr>
     <br>
 
@@ -38,7 +39,9 @@
             <td>
                     ${emp.age}
             </td>
-
+            <td>
+                    ${emp.mail}
+            </td>
             <td>
                 <input type="button" value="Обновить" onclick="window.location.href = '${updateButton}'">
                 <input type="button" value="Удалить" onclick="window.location.href = '${deleteButton}'">

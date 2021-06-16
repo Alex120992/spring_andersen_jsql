@@ -27,7 +27,8 @@ public class PersonDaoImpl implements PersonDao {
                     person.setId(resultSet.getInt("id"));
                     person.setAge(resultSet.getInt("age"));
                     person.setName(resultSet.getString("name"));
-                    person.setSurname(resultSet.getString("family"));
+                    person.setSurname(resultSet.getString("surname"));
+                    person.setMail(resultSet.getString("mail"));
                     personList.add(person);
                 }
             } catch (SQLException e) {
@@ -55,6 +56,7 @@ public class PersonDaoImpl implements PersonDao {
                 ps.setString(1, person.getName());
                 ps.setString(2, person.getSurname());
                 ps.setInt(3, person.getAge());
+                ps.setString(4, person.getMail());
                 ps.executeUpdate();
                 connection.commit();
             } catch (SQLException e) {
@@ -65,7 +67,7 @@ public class PersonDaoImpl implements PersonDao {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            System.err.println(e.getErrorCode());
+            e.printStackTrace();
         }
     }
 
@@ -78,8 +80,9 @@ public class PersonDaoImpl implements PersonDao {
                 while (resultSet.next()) {
                     person.setId(resultSet.getInt("id"));
                     person.setName(resultSet.getString("name"));
-                    person.setSurname(resultSet.getString("family"));
+                    person.setSurname(resultSet.getString("surname"));
                     person.setAge(resultSet.getInt("age"));
+                    person.setMail(resultSet.getString("mail"));
                 }
             } catch (SQLException e) {
                 connection.rollback();
