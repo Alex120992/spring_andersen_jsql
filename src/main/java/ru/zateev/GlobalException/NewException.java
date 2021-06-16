@@ -11,7 +11,7 @@ public class NewException {
     @ExceptionHandler
     public ResponseEntity<IncorrectMail> handleException(WrongMailException wrongMailException) {
         IncorrectMail incorrectMail = new IncorrectMail();
-        incorrectMail.setInfo("ПРи вводе почты вы ввели некорректные данные");
+        incorrectMail.setInfo("При вводе почты вы ввели некорректные данные");
 
         return new ResponseEntity<>(incorrectMail, HttpStatus.BAD_REQUEST);
     }

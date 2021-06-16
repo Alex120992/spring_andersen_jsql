@@ -2,6 +2,8 @@ package ru.zateev.validator;
 
 import org.springframework.stereotype.Component;
 import ru.zateev.Entity.Person;
+import ru.zateev.GlobalException.NewException;
+import ru.zateev.GlobalException.WrongMailException;
 
 @Component
 public class Validator {
@@ -33,6 +35,7 @@ public class Validator {
     }
 
     public boolean validMail(String mail) {
+        if (!mail.matches(regularMail)) {throw new WrongMailException("Проблемы при вводе почты");}
         return !mail.matches(regularMail);
     }
 }

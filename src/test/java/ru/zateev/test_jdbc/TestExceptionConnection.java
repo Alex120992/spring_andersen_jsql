@@ -48,9 +48,7 @@ class TestExceptionConnection {
         SQLException sqlException = Assertions.assertThrows(SQLException.class, () -> {
             connectionByDatabase.connectByDatabase(testUser);
         });
-
         Assertions.assertNotNull(sqlException.getMessage());
-
     }
 
 

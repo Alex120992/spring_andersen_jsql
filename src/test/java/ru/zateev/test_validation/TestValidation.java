@@ -1,5 +1,6 @@
 package ru.zateev.test_validation;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.Assert;
 import ru.zateev.Const;
+import ru.zateev.Entity.Person;
+import ru.zateev.GlobalException.NewException;
+import ru.zateev.GlobalException.WrongMailException;
 import ru.zateev.configuration.Conf;
 import ru.zateev.validator.Validator;
 
@@ -84,6 +88,17 @@ public class TestValidation {
             if (!validator.validAge(age)) value = false;
         }
         Assert.isTrue(value, "Проверка возраста не прошла");
+    }
+
+    @Test
+    public void checkMailThrowException (){
+        Person person = new Person();
+        person.setMail("addsadfa");
+        WrongMailException wrongMailException = Assertions.assertThrows(WrongMailException.class, ()->{
+            validator.validMail(person.getMail());
+        });
+        String s = wrongMailException.getMessage();
+        Assertions.assertNotNull(s);
     }
 
 }

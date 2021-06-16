@@ -41,9 +41,7 @@ public class HomeController {
 
     @RequestMapping("/saveEmployee")
     public String saveEmployee(@ModelAttribute("personsss") Person empl, Model model) {
-
         validator.generalValidator(empl);
-
         if (empl.isValide()) {
             System.out.println("Работает");
             model.addAttribute("personsss", empl);
