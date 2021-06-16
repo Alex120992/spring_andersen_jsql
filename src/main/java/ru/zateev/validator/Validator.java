@@ -38,4 +38,6 @@ public class Validator {
         if (!mail.matches(regularMail)) {throw new WrongMailException("Проблемы при вводе почты");}
         return !mail.matches(regularMail);
     }
+
+
 }

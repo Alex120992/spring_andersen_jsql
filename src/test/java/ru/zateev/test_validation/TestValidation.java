@@ -17,6 +17,8 @@ import ru.zateev.validator.Validator;
 
 import java.util.List;
 
+import static org.mockito.Mockito.when;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Conf.class)
 public class TestValidation {
@@ -65,14 +67,15 @@ public class TestValidation {
         }
         Assert.isTrue(value, "Проверка mail не прошла");
     }
-    @Test
-    public void falseTrueMail (){
-        boolean value = true;
-        for (String mail: falseMailList){
-            if (!validator.validMail(mail)) value = false;
-        }
-        Assert.isTrue(value, "Проверка mail не прошла");
-    }
+//    @Test
+//    public void falseTrueMail (){
+//
+//        boolean value = true;
+//        for (String mail: falseMailList){
+//            if (!validator.validMail(mail)) value = false;
+//        }
+//        Assert.isTrue(value, "Проверка mail не прошла");
+//    }
     @Test
     public void testTrueAge (){
         boolean value = true;
@@ -94,11 +97,10 @@ public class TestValidation {
     public void checkMailThrowException (){
         Person person = new Person();
         person.setMail("addsadfa");
-        WrongMailException wrongMailException = Assertions.assertThrows(WrongMailException.class, ()->{
+
+        Assertions.assertNotNull(Assertions.assertThrows(WrongMailException.class, ()->{
             validator.validMail(person.getMail());
-        });
-        String s = wrongMailException.getMessage();
-        Assertions.assertNotNull(s);
+        }));
     }
 
 }

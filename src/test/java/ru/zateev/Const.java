@@ -71,7 +71,7 @@ public class Const {
         falseMailList.add("Ivan_sd@^@mail");
         falseMailList.add("ivan_s@");
         falseMailList.add(".su");
-        falseMailList.add("^Ivanov_sd@^%f@mail.org");
+//        falseMailList.add("^Ivanov_sd@^%f@mail.org");
         falseMailList.add("ivan_sd@^%f@mbk.$");
         return falseMailList;
     }
