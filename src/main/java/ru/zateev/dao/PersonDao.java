@@ -10,9 +10,9 @@ public interface PersonDao {
 
     List<Person> getAllPersons(User user);
 
-    void savePerson(Person person, User user);
+    boolean savePerson(Person person, User user);
 
     Person getPerson(int id, User user);
 
-    void deletePerson(int id, User user);
+    boolean deletePerson(int id, User user);
 }

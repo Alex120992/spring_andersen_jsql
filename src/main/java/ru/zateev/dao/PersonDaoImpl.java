@@ -46,12 +46,12 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void savePerson(Person person, User user) {
+    public boolean savePerson(Person person, User user) {
         try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
             try {
                 PreparedStatement ps;
                 if (person.getId() != 0) {
-                    ps = connection.prepareStatement(user.getUpdateData()+person.getId());
+                    ps = connection.prepareStatement(user.getUpdateData() + person.getId());
                 } else {
                     ps = connection.prepareStatement(user.getSaveData(), Statement.RETURN_GENERATED_KEYS);
                 }
@@ -61,6 +61,7 @@ public class PersonDaoImpl implements PersonDao {
                 ps.setString(4, person.getMail());
                 ps.executeUpdate();
                 connection.commit();
+
             } catch (SQLException e) {
                 connection.rollback();
                 connection.setAutoCommit(true);
@@ -68,16 +69,18 @@ public class PersonDaoImpl implements PersonDao {
             }
             connection.commit();
             connection.setAutoCommit(true);
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override
     public Person getPerson(int id, User user) {
         Person person = new Person();
         try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
-            try (PreparedStatement ps = connection.prepareStatement(user.getSelectById()+id)) {
+            try (PreparedStatement ps = connection.prepareStatement(user.getSelectById() + id)) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     person.setId(resultSet.getInt("id"));
@@ -100,7 +103,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void deletePerson(int id, User user) {
+    public boolean deletePerson(int id, User user) {
         try (Connection connection = new ConnectionByDatabase().connectByDatabase(user)) {
             try (PreparedStatement pstmt = connection.prepareStatement(user.getDelete())) {
                 pstmt.setInt(1, id);
@@ -112,8 +115,10 @@ public class PersonDaoImpl implements PersonDao {
             }
             connection.commit();
             connection.setAutoCommit(true);
+            return true;
         } catch (SQLException e) {
             System.err.println(e.getErrorCode());
         }
+        return false;
     }
 }
